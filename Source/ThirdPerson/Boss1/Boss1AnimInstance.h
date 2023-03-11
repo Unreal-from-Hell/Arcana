@@ -37,6 +37,9 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_ShieldHit();
+
+	UFUNCTION()
+	void AnimNotify_PlayDropBoss1Particle();
 private:
 	// ========================================================================================
 	// 상태 관련 변수
