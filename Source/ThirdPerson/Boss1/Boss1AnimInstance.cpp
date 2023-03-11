@@ -4,6 +4,7 @@
 #include "Boss1AnimInstance.h"
 
 #include "Boss1Character.h"
+#include "Boss1Controller.h"
 #include "Components/AudioComponent.h"
 
 UBoss1AnimInstance::UBoss1AnimInstance()
@@ -18,6 +19,7 @@ UBoss1AnimInstance::UBoss1AnimInstance()
 		_gimmick1Montage=Gimmick1.Object;
 	if(Gimmick2.Succeeded())
 		_gimmick2Montage=Gimmick2.Object;
+	
 }
 
 void UBoss1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -62,11 +64,16 @@ void UBoss1AnimInstance::AnimNotify_AttackHit()
 
 void UBoss1AnimInstance::AnimNotify_Gimmick1()
 {
-	// TODO Homepos 문제 해결 후 위치를 Homepos로 변경
-	TryGetPawnOwner()->SetActorLocation(FVector(700.0f, 400.0f, 226.0f));
+	ABoss1Character* Boss1 = Cast<ABoss1Character>(TryGetPawnOwner());
+	Boss1->SetActorLocation(Boss1->GetGimmick1Location());
 }
 
 void UBoss1AnimInstance::AnimNotify_ShieldHit()
 {
 	// TODO Gimmick2 방패 치는 소리
+}
+
+void UBoss1AnimInstance::AnimNotify_PlayDropBoss1Particle()
+{
+	Cast<ABoss1Character>(TryGetPawnOwner())->SpawnGimmick1DropParticle();
 }

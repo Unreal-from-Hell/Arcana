@@ -3,9 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/TargetPoint.h"
 #include "GameFramework/Character.h"
 #include "Sound/SoundCue.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Boss1Character.generated.h"
+
+
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnGimmick1EndDelegate);
@@ -37,6 +42,8 @@ public:
 	// 변수 관련
 	float GetHp(){return _hp;};
 	void SetHp(float Hp){_hp = Hp;};
+
+	FVector GetGimmick1Location(){return _gimmick1Location;};
 	
 	bool GetbClearGimmick1(){return _bClearGimmick1;};
 	void SetbClearGimmick1(bool bClear){_bClearGimmick1 = bClear;};
@@ -52,9 +59,10 @@ public:
 	// 기본 공격
 	void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
-
+	
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	
 	// 기믹 1
 	void Gimmick1();
 	FOnGimmick1EndDelegate OnGimmick1End;
@@ -67,6 +75,17 @@ public:
 	void PlayGimmick1Sound();
 	void PlayAttackSound();
 
+	// ===========================================================================================
+	// 이펙트
+	void SpawnGimmick1ShieldParticle();
+	void SpawnGimmick1DropParticle();
+
+	
+public:
+	// Gimmick1 안전구역 Target Point 배열
+	UPROPERTY(EditAnywhere, Category = "Target Points")
+	TArray<ATargetPoint*> TargetPoints;
+
 private:
 	UPROPERTY()
 	class UBoss1AnimInstance* _animInstance;
@@ -76,6 +95,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float _hp = 100.0f;
+
+	UPROPERTY(VisibleAnywhere)
+	float _maxHp = 100.0f;
+
+	UPROPERTY(VisibleAnywhere)
+	FVector _gimmick1Location;
 
 	UPROPERTY(VisibleAnywhere)
 	bool _bClearGimmick1=false;
@@ -93,4 +118,12 @@ private:
 
 	UPROPERTY()
 	USoundCue* SC_Attack;
+
+	// ============================================================================================
+	// 이펙트
+	UPROPERTY(EditAnywhere, Category="Effects")
+	UParticleSystem* _shieldParticle;
+
+	UPROPERTY(EditAnywhere, Category="Effects")
+	UParticleSystem* _dropBoss1Particle;
 };

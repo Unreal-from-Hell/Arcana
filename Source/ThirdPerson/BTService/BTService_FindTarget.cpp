@@ -41,6 +41,7 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 		FVector Distance = BossLocation-CharacterLocation;
 		if(Distance.Length() < DetectRadius)
 		{
+			OwnerComp.GetAIOwner()->StopMovement();
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, Murdock);
 			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);
 			
@@ -49,9 +50,9 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 		}
 		else
 		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, nullptr);
+			// TODO StopMovement 개선이 필요함
 			OwnerComp.GetAIOwner()->StopMovement();
-			// TODO 원래 위치로 되돌아가서 정찰하기
+			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, nullptr);
 			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Red, false, 0.2f);
 		}
 	}
