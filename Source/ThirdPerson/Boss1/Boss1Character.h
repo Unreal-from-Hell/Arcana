@@ -69,24 +69,32 @@ public:
 
 	UFUNCTION()
 	void OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	// 기믹1 투사체
+	UFUNCTION()
+	void Drop();
 	
 	// ===========================================================================================
 	// 사운드
 	void PlayGimmick1Sound();
 	void PlayAttackSound();
+	void PlaySwordSound();
 
 	// ===========================================================================================
 	// 이펙트
 	void SpawnGimmick1ShieldParticle();
-	void SpawnGimmick1DropParticle();
-
+	void SpawnBoss1DropParticle();
 	
 public:
+	// ===========================================================================================
+	// 변수
 	// Gimmick1 안전구역 Target Point 배열
 	UPROPERTY(EditAnywhere, Category = "Target Points")
 	TArray<ATargetPoint*> TargetPoints;
 
 private:
+	// ===========================================================================================
+	// 변수
 	UPROPERTY()
 	class UBoss1AnimInstance* _animInstance;
 
@@ -119,11 +127,33 @@ private:
 	UPROPERTY()
 	USoundCue* SC_Attack;
 
+	UPROPERTY()
+	USoundCue* SC_Sword;
+
 	// ============================================================================================
 	// 이펙트
 	UPROPERTY(EditAnywhere, Category="Effects")
-	UParticleSystem* _shieldParticle;
+	UParticleSystem* P_NotSafeZoneParticle;
 
 	UPROPERTY(EditAnywhere, Category="Effects")
-	UParticleSystem* _dropBoss1Particle;
+	UParticleSystem* P_SafeZoneParticle;
+
+	UPROPERTY(EditAnywhere, Category="Effects")
+	UParticleSystem* P_DropBoss1Particle;
+
+	// Target Point에 추가한 particle의 배열
+	UPROPERTY(VisibleAnywhere)
+	TArray<UParticleSystemComponent*> ParticleSystemComponents;
+
+	// 투사체 관련
+	UPROPERTY(VisibleAnywhere)
+	UNiagaraSystem* NS_ProjectileCast;
+
+	// ============================================================================================
+	// 투사체
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	FVector MuzzleOffset;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	TSubclassOf<class AGimmick1_Projectile> ProjectileClass;
 };

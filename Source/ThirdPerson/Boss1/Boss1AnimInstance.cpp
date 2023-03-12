@@ -59,7 +59,8 @@ void UBoss1AnimInstance::PlayGimmick1Montage()
 
 void UBoss1AnimInstance::AnimNotify_AttackHit()
 {
-	// TODO 검 휘두르는 소리 
+	ABoss1Character* Boss1 = Cast<ABoss1Character>(TryGetPawnOwner());
+	Boss1->PlaySwordSound();
 }
 
 void UBoss1AnimInstance::AnimNotify_Gimmick1()
@@ -75,5 +76,5 @@ void UBoss1AnimInstance::AnimNotify_ShieldHit()
 
 void UBoss1AnimInstance::AnimNotify_PlayDropBoss1Particle()
 {
-	Cast<ABoss1Character>(TryGetPawnOwner())->SpawnGimmick1DropParticle();
+	Cast<ABoss1Character>(TryGetPawnOwner())->SpawnBoss1DropParticle();
 }
