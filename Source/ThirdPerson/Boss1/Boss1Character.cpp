@@ -70,7 +70,7 @@ void ABoss1Character::Tick(float DeltaTime)
 
 	// 임시로 체력이 계속 줄도록 
 	if(GetHp()>75.1f)
-		SetHp(GetHp()-0.01f);
+		SetHp(GetHp()-0.1f);
 	
 }
 
@@ -102,8 +102,6 @@ void ABoss1Character::Attack()
 	_animInstance->PlayAttackMontage();
 	_animInstance->JumpToSection();
 	PlayAttackSound();
-	for(uint8 i=0; i<10; i++)
-		Drop();
 	_isAttacking=true;
 }
 
@@ -120,13 +118,26 @@ void ABoss1Character::Gimmick1()
 	SpawnGimmick1ShieldParticle();
 }
 
+void ABoss1Character::Gimmick1DropProjectile()
+{
+	FTimerHandle WaitHandle;
+	float WaitTime=0.01f; //시간을 설정하고
+	int32 NumOfProjectile=100;
+	GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
+	{
+		--NumOfProjectile;
+		//UE_LOG(LogTemp, Warning, TEXT("Time: %d"), NumOfProjectile);
+		if(NumOfProjectile<=0)
+			GetWorldTimerManager().ClearTimer(WaitHandle);
+		Drop();	// 여기에 코드를 치면 된다.
+	}), WaitTime, true); //반복도 여기서 추가 변수를 선언해 설정가능
+}
+
 void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	OnGimmick1End.Broadcast();
 	
-	// TODO 투사체 낙하
-	
-	Drop();
+	Gimmick1DropProjectile();
 	
 	// TODO 기믹1 종료 후 호출 
 	for(auto Particle : ParticleSystemComponents)
@@ -137,7 +148,7 @@ void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterr
 
 void ABoss1Character::Drop()
 {
-	FVector DropLocation = FVector(FMath::RandRange(-1300, 3000), FMath::RandRange(-1300, 3000), 2000.0f);
+	FVector DropLocation = GetActorLocation() + FVector(FMath::RandRange(-1300, 3000), FMath::RandRange(-1300, 3000), 2000.0f);
 	
 	UWorld* World = GetWorld();
 	if(World)
@@ -177,10 +188,10 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 	// 임시로 Particle 생성
 	for(auto TargetPoint : TargetPoints)
 	{
-		FVector SpawnFrontLocation = TargetPoint->GetActorLocation() + FVector(0,0,100); 
-		FVector SpawnLeftLocation =  SpawnFrontLocation + FVector(100, -100, 0);
-		FVector SpawnRightLocation = SpawnFrontLocation + FVector(100, 100, 0);
-		FVector SpawnBehindLocation = SpawnFrontLocation + FVector(200, 0, 0);
+		FVector SpawnFrontLocation = TargetPoint->GetActorLocation() + FVector(0,0,300); 
+		FVector SpawnLeftLocation =  SpawnFrontLocation + FVector(300, -300, 0);
+		FVector SpawnRightLocation = SpawnFrontLocation + FVector(300, 300, 0);
+		FVector SpawnBehindLocation = SpawnFrontLocation + FVector(600, 0, 0);
 		
 		if(idx == RandomIdx)
 		{

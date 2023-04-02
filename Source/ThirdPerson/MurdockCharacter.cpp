@@ -39,7 +39,7 @@ AMurdockCharacter::AMurdockCharacter()
 	// Character Movement 설정
 	GetCharacterMovement()->JumpZVelocity = 550.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 2000.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
@@ -91,7 +91,7 @@ void AMurdockCharacter::Sprint()
 	if(_animInstance->GetWalk())
 		return;
 	_animInstance->SetSprint(true);
-	GetCharacterMovement()->MaxWalkSpeed = 700.f;
+	GetCharacterMovement()->MaxWalkSpeed = 3000.f;
 }
 
 void AMurdockCharacter::StopSprint()
@@ -99,7 +99,7 @@ void AMurdockCharacter::StopSprint()
 	if(_animInstance->GetWalk())
 		return;
 	_animInstance->SetSprint(false);
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 2000.f;
 }
 
 void AMurdockCharacter::Walking()
@@ -107,7 +107,7 @@ void AMurdockCharacter::Walking()
 	if(_animInstance->GetSprint())
 		return;
 	_animInstance->SetWalking(true);
-	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	GetCharacterMovement()->MaxWalkSpeed = 1500.f;
 }
 
 void AMurdockCharacter::StopWalking()
@@ -115,7 +115,7 @@ void AMurdockCharacter::StopWalking()
 	if(_animInstance->GetSprint())
 		return;
 	_animInstance->SetWalking(false);
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 2000.f;
 }
 
 // ==================================================================================
