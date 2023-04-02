@@ -65,6 +65,7 @@ public:
 	
 	// 기믹 1
 	void Gimmick1();
+	void Gimmick1DropProjectile();
 	FOnGimmick1EndDelegate OnGimmick1End;
 
 	UFUNCTION()

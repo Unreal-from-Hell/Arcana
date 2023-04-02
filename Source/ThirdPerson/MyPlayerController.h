@@ -19,43 +19,26 @@ public:
 	AMyPlayerController();
 
 protected:
-	// 마우스 관련 함수
-	// ========================================
-	void Yaw(float Value);
-	void Pitch(float Value);
-	// 움직임 관련 함수
-	// ========================================
-	// 걷기
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	// 점프
-	void Jump();
-	void StopJumping();
-	// // 달리기
-	// void Sprint();
-	// void StopSprint();
-	// // 천천히 걷기
-	// void Walking();
-	// void StopWalking();
-	// // 공격 관련 함수
-	// // ========================================
-	// // 기본 공격
-	// void Attack();
-	//
-	// // 스킬 공격
-	// void SKill_1();
-	// void SKill_2();
-	// void SKill_3();
-	// void SKill_4();
+	/** True if the controlled character should navigate to the mouse cursor. */
+	uint32 bMoveToMouseCursor : 1;
 
-	// ===========================================
-	// 초기화 관련 함수
-	virtual void SetupInputComponent() override;
 	virtual void OnPossess(APawn* InPawn) override;
+	// Begin PlayerController interface
+	UFUNCTION()
+	virtual void PlayerTick(float DeltaTime) override;
+	virtual void SetupInputComponent() override;
+	// End PlayerController interface
+
+	/** Input handlers for SetDestination action. */
+	void OnSetDestinationPressed();
+	void OnSetDestinationReleased();
+
 
 private:
-	APawn* _pawn;
-	AMurdockCharacter* _MurdockCharacter;
+	bool bInputPressed; // Input is bring pressed
+	bool bIsTouch; // Is it a touch device
+	float FollowTime; // For how long it has been pressed
+	class AMyCharacter* MyPawn = nullptr;
 
 };
 

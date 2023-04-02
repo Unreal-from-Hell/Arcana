@@ -4,11 +4,12 @@
 
 #include "MurdockCharacter.h"
 #include "ThirdPersonCharacter.h"
+#include "Character/MyCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AThirdPersonGameMode::AThirdPersonGameMode()
 {
-
-	DefaultPawnClass=AMurdockCharacter::StaticClass();
+	
+	DefaultPawnClass=AMyCharacter::StaticClass();
 
 }

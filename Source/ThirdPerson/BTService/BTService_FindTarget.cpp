@@ -25,7 +25,7 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	if (nullptr == ControllingPawn) return;
 
 	UWorld* World = ControllingPawn->GetWorld();
-	float DetectRadius = 800.0f;
+	float DetectRadius = 2000.0f;
 
 	TSubclassOf<AMurdockCharacter> ClassToFind;
 	ClassToFind = AMurdockCharacter::StaticClass();

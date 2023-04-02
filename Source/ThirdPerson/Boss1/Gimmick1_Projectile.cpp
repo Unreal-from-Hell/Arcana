@@ -42,16 +42,16 @@ void AGimmick1_Projectile::BeginPlay()
 void AGimmick1_Projectile::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
-	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AGimmick1_Projectile::OnProjectileOverlap);
+	// TODO 에러 해결 및 Overlapped 해결
+	//CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AGimmick1_Projectile::OnProjectileOverlap);
 }
 
 void AGimmick1_Projectile::OnProjectileOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	// TODO Overlapped 해결
 	UE_LOG(LogTemp, Warning, TEXT("Projectile Overlapped"));
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_ProjectileHit, GetActorLocation(), FRotator::ZeroRotator);
-	this->Destroy();
+	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_ProjectileHit, GetActorLocation(), FRotator::ZeroRotator);
 }
 
 // Called every frame
