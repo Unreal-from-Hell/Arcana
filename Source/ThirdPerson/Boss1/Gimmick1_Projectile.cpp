@@ -21,6 +21,9 @@ AGimmick1_Projectile::AGimmick1_Projectile()
 	CollisionComponent->SetCollisionProfileName(TEXT("Projectile"));
 	RootComponent=CollisionComponent;
 
+	// OnComponent Hit 함수 등록
+	CollisionComponent->OnComponentHit.AddDynamic(this, &AGimmick1_Projectile::OnCompHit);
+	
 	// Projectile Movement 초기화
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
@@ -46,13 +49,16 @@ void AGimmick1_Projectile::PostInitializeComponents()
 	//CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AGimmick1_Projectile::OnProjectileOverlap);
 }
 
-void AGimmick1_Projectile::OnProjectileOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AGimmick1_Projectile::OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
 {
-	// TODO Overlapped 해결
-	UE_LOG(LogTemp, Warning, TEXT("Projectile Overlapped"));
-	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_ProjectileHit, GetActorLocation(), FRotator::ZeroRotator);
+	FVector HitLocation = HitComp->GetOwner()->GetActorLocation();
+	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_ProjectileHit, HitLocation, FRotator(-90, 0 ,0));
+
+	this->Destroy();
 }
+
 
 // Called every frame
 void AGimmick1_Projectile::Tick(float DeltaTime)

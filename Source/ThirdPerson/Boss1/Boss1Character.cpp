@@ -44,6 +44,11 @@ ABoss1Character::ABoss1Character()
 	if(NSCast.Succeeded())
 		NS_ProjectileCast = NSCast.Object;
 
+	_SafeZoneBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	_SafeZoneBoxComponent->SetupAttachment(GetMesh());
+	_SafeZoneBoxComponent->InitBoxExtent(FVector(300.f, 300.f, 300.f));
+	_SafeZoneBoxComponent->SetCollisionProfileName(TEXT("SafeZone"));
+
 
 	bUseControllerRotationYaw=false;
 	GetCharacterMovement()->bUseControllerDesiredRotation=false;
@@ -120,17 +125,8 @@ void ABoss1Character::Gimmick1()
 
 void ABoss1Character::Gimmick1DropProjectile()
 {
-	FTimerHandle WaitHandle;
-	float WaitTime=0.01f; //시간을 설정하고
-	int32 NumOfProjectile=100;
-	GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
-	{
-		--NumOfProjectile;
-		//UE_LOG(LogTemp, Warning, TEXT("Time: %d"), NumOfProjectile);
-		if(NumOfProjectile<=0)
-			GetWorldTimerManager().ClearTimer(WaitHandle);
-		Drop();	// 여기에 코드를 치면 된다.
-	}), WaitTime, true); //반복도 여기서 추가 변수를 선언해 설정가능
+	// 0.02초마다 투사체 추락
+	GetWorldTimerManager().SetTimer(_countdownHandle, this, &ABoss1Character::Drop,0.02f, true);
 }
 
 void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -138,17 +134,23 @@ void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterr
 	OnGimmick1End.Broadcast();
 	
 	Gimmick1DropProjectile();
-	
-	// TODO 기믹1 종료 후 호출 
-	for(auto Particle : ParticleSystemComponents)
-		Particle->DestroyComponent();
 
 	SetbClearGimmick1(true);
 }
 
 void ABoss1Character::Drop()
 {
-	FVector DropLocation = GetActorLocation() + FVector(FMath::RandRange(-1300, 3000), FMath::RandRange(-1300, 3000), 2000.0f);
+	// 일정 시간 지난 후 Timer 초기화 
+	--_countdown;
+	if(_countdown <= 0.f)
+	{
+		GetWorldTimerManager().ClearTimer(_countdownHandle);
+		
+		for(auto Particle : ParticleSystemComponents)
+			Particle->DestroyComponent();
+	}
+	
+	FVector DropLocation = GetActorLocation() + FVector(FMath::RandRange(-5000, 5000), FMath::RandRange(-5000, 5000), 3000.0f);
 	
 	UWorld* World = GetWorld();
 	if(World)
@@ -196,6 +198,8 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 		if(idx == RandomIdx)
 		{
 			// TODO 투명 콜리전 박스 생성해서 Safe Zone 생성
+			_SafeZoneBoxComponent->SetWorldLocation(TargetPoint->GetActorLocation());
+			
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnLeftLocation, FRotator(0,90,0), true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnRightLocation, FRotator(0,90,0), true));
