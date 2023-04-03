@@ -22,8 +22,10 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 
-	void OnProjectileOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+private:
+	UFUNCTION()
+	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
 	// Called every frame
@@ -34,10 +36,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
 	USphereComponent* CollisionComponent;
 
-	// Projectile Movemnet
+	// Projectile Movement
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
+	// Projectile Hit
 	UPROPERTY(VisibleAnywhere)
 	UNiagaraSystem* NS_ProjectileHit;
 };

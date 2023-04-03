@@ -8,6 +8,7 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/BoxComponent.h"
 #include "Boss1Character.generated.h"
 
 
@@ -120,6 +121,12 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	bool _bClearGimmick3=false;
 
+	UPROPERTY()
+	UBoxComponent* _SafeZoneBoxComponent;
+	
+	// Timer 관련 변수
+	int32 _countdown = 1000;
+	FTimerHandle _countdownHandle;
 	// ============================================================================================
 	// 사운드
 	UPROPERTY()
