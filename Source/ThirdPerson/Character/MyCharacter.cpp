@@ -45,6 +45,7 @@ AMyCharacter::AMyCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;//false
 	bUseControllerRotationRoll = false;//fa
+
 	
 
 	//스프링암 설치 및 설정
@@ -61,7 +62,15 @@ AMyCharacter::AMyCharacter()
 	TopDownCameraComponent->SetupAttachment(CameraBoom,USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = true;//tr
 
+	//
+	TopDownCameraComponent->SetFieldOfView(90.f);
+	TopDownCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	TopDownCameraComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+	
+
 	MotionWarpComp = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("Warp"));
+	
+	
 }
 
 // Called when the game starts or when spawned
@@ -75,6 +84,10 @@ void AMyCharacter::BeginPlay()
 	//델리게이트 생성 
 	AnimInstance->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
 	AnimInstance->OnMontageStarted.AddDynamic(this, &AMyCharacter::OnAttackMontageStarted);
+
+
+	
+	
 	
 }
 
@@ -85,11 +98,17 @@ void AMyCharacter::PostInitializeComponents()
 
 
 
-// Called every frame 캐릭터 틱-함수, 스킬 T에 사용 
+// 캐릭터 틱 -> 실시간 캐릭터 암 늘리거나 줄이는데 사용
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bShiftKeyPressed)
+		CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, 900, GetWorld()->DeltaTimeSeconds, ZoomSpeed);
 	
+	else
+		CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, 450, GetWorld()->DeltaTimeSeconds, ZoomSpeed);
+
 }
 
 // 바인딩 T델리게이트로 열거형 스킬 불러오기 
@@ -99,6 +118,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction(TEXT("LeftClick"),EInputEvent::IE_Pressed,this,&AMyCharacter::Attack);
 	PlayerInputComponent->BindAction(TEXT("RightClick"),EInputEvent::IE_Pressed,this,&AMyCharacter::Parring);
+	
 	PlayerInputComponent->BindAction(TEXT("Shift"),EInputEvent::IE_Pressed,this,&AMyCharacter::Shift);
 	PlayerInputComponent->BindAction(TEXT("Shift"),EInputEvent::IE_Released,this,&AMyCharacter::ShiftReleasd);
 	
@@ -125,30 +145,24 @@ bool AMyCharacter::GetAttacking()
 
 void AMyCharacter::Shift()
 {
-	if(IsAttacking == true)
+	if(IsAttacking == true) //공격중인지 확인
 		return;
-	// if(MyControler->WasInputKeyJustPressed(EKeys::LeftShift))
-	// {
-	// 	GetCharacterMovement()->MaxWalkSpeed=5000.f;
-	// }
-
-	float DeltaTime = FApp::GetDeltaTime();
-	float ZoomFactor = (DeltaTime / 0.5f);
-	ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
-
-
-	float A = 700.0f;
-	float B = 200.0f;
-	float lerp = UKismetMathLibrary::Lerp(A,B,ZoomFactor);
-	CameraBoom->TargetArmLength= lerp;
-	GetCharacterMovement()->MaxWalkSpeed= 5000.f;
 	
+	GetCharacterMovement()->MaxWalkSpeed= 5000.f; //눌렀을 경우 이동속도 증가
+
+	if(!AnimInstance->Dashing) // 기존의 모션 한번만 발동되게 체크
+	{
+		AnimInstance->ChangeMotion();
+		IsAttacking = true;
+	}
+	bShiftKeyPressed = true; //틱함수 발동 
+	AnimInstance->Dashing = true;
 }
 
 void AMyCharacter::ShiftReleasd()
 {
-	CameraBoom->TargetArmLength= 400.f;
-	GetCharacterMovement()->MaxWalkSpeed= 1000.f;
+	bShiftKeyPressed = false;
+	GetCharacterMovement()->MaxWalkSpeed= 1000.f; // 원래 속도 
 }
 
 void AMyCharacter::UpDown(float Value)
@@ -165,7 +179,6 @@ void AMyCharacter::UpDown(float Value)
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	AddMovementInput(Direction, Value);
 }
-
 void AMyCharacter::LeftRight(float Value)
 {
 	if(Value == 0.f || IsAttacking == true)
@@ -184,19 +197,19 @@ void AMyCharacter::LeftRight(float Value)
 	AddMovementInput(Direction, Value);
 	
 }
-
 void AMyCharacter::Yaw(float Value)
 {
 	AddControllerYawInput(Value);
 	UE_LOG(LogTemp,Warning,TEXT("회전을 실행하는 중입니다. "));
 }
 
-// 캐릭터 우클릭 평타 몬티지 호출 
+// 캐릭터 우클릭 평타
 void AMyCharacter::Attack()
 {
 	if(IsAttacking)
 		return;
 	IsAttacking = true;
+	AnimInstance->Dashing=false;
 	
 	AnimInstance->PlayAttackMontage();
 
@@ -205,16 +218,17 @@ void AMyCharacter::Attack()
 	
 }
 
+//패링
 void AMyCharacter::Parring()
 {
 	if(IsAttacking)
 		return;
+	AnimInstance->Dashing=false;
 	IsAttacking = true;
 
 	AnimInstance->PlayParringMontage();
 	
 }
-
 
 
 void AMyCharacter::SkillPress(ECharacterState InputSkill)
@@ -224,7 +238,7 @@ void AMyCharacter::SkillPress(ECharacterState InputSkill)
 		return;
 	IsAttacking = true;
 	// 열거형 저장
-	
+	AnimInstance->Dashing=false;
 	MyCharacterState = InputSkill;
 
 	
