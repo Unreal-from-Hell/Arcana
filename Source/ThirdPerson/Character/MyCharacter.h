@@ -75,15 +75,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-
-	/// 카메라 줌인
-	bool bShiftKeyPressed;
-	UPROPERTY(EditAnywhere, Category = "Camera")
-	float ZoomSpeed = 4.0f;
-
-
-	
-	
 	//캐릭터의 현재 스킬 저장 
 	ECharacterState MyCharacterState = ECharacterState::State_None;
 

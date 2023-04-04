@@ -23,7 +23,6 @@ public:
 	void PlaySkillQ(){Montage_Play(SkillAnimationQ,1.f);}
 	void PlaySkillE(){Montage_Play(SkillAnimationE,1.f);}
 	void PlaySkillT(){Montage_Play(SkillAnimationT,1.f);}
-	void ChangeMotion(){Montage_Play(RunMotion,1.3f);}
 	void JumpToSection(int32 SectionIndex);
 	void JumpToSectionQ(int32 SectionIndex);
 	void JumpToSectionE(int32 SectionIndex);
@@ -31,10 +30,6 @@ public:
 	FName GetAttackMontageName(int32 SectionIndex);
 
 	void ChangeAttacked();
-	void ChangeDashing();
-	
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category=Pawn, meta=(AllowPrivateAccess=true))
-	bool Dashing;
 private:
 	UFUNCTION()
 	//void AnimNotify_AttackHit(); // AttackHit 마다 소리 예정 
@@ -61,6 +56,4 @@ private:
 	UAnimMontage* SkillAnimationE;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category=Pawn, meta=(AllowPrivateAccess=true))
 	UAnimMontage* SkillAnimationT;
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category=Pawn, meta=(AllowPrivateAccess=true))
-	UAnimMontage* RunMotion;
 };
