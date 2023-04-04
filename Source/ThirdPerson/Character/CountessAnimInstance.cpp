@@ -45,6 +45,12 @@ UCountessAnimInstance::UCountessAnimInstance()
 		SkillAnimationT = SkillT.Object;
 		
 	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>Motion(TEXT("AnimMontage'/Game/ThirdPerson/Blueprints/Character/Animation/Montage/Shift'"));
+	if(Motion.Succeeded())
+	{
+		RunMotion = Motion.Object;
+		
+	}
 }
 
 // 실시간 애니인스턴스에 캐릭터상태 업데이트 
@@ -95,6 +101,17 @@ void UCountessAnimInstance::ChangeAttacked()
 	else
 		Attacked = true;
 }
+
+void UCountessAnimInstance::ChangeDashing()
+{
+	if(Dashing == true)
+		Dashing = false;
+	else
+	{
+		Dashing = true;
+	}
+}
+
 
 //타이밍에 맞는 함수 호출예정 
 void UCountessAnimInstance::AnimNotify()
