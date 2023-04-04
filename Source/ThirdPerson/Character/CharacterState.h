@@ -16,4 +16,5 @@ enum class ECharacterState : uint8
 	State_SkillF UMETA(DisplayName = "SkillF"),
 	State_SkillT UMETA(DisplayName = "SkillT"),
 	State_Dash UMETA(DisplayName = "Dash"),
+	State_Space UMETA(DisplayName = "Space"),
 };
