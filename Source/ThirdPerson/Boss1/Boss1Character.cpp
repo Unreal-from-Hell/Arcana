@@ -75,7 +75,7 @@ void ABoss1Character::Tick(float DeltaTime)
 
 	// 임시로 체력이 계속 줄도록 
 	if(GetHp()>75.1f)
-		SetHp(GetHp()-0.1f);
+		SetHp(GetHp()-0.02f);
 	
 }
 
@@ -131,6 +131,7 @@ void ABoss1Character::Gimmick1DropProjectile()
 
 void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	// TODO 기본공격후 호출이됨 수정필요
 	OnGimmick1End.Broadcast();
 	
 	Gimmick1DropProjectile();
@@ -142,7 +143,7 @@ void ABoss1Character::Drop()
 {
 	// 일정 시간 지난 후 Timer 초기화 
 	--_countdown;
-	if(_countdown <= 0.f)
+	if(_countdown <= 0)
 	{
 		GetWorldTimerManager().ClearTimer(_countdownHandle);
 		
