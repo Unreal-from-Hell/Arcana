@@ -8,6 +8,7 @@
 #include "ThirdPerson/MurdockCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "ThirdPerson/Character/MyCharacter.h"
 
 UBTService_FindTarget::UBTService_FindTarget()
 {
@@ -27,26 +28,26 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	UWorld* World = ControllingPawn->GetWorld();
 	float DetectRadius = 2000.0f;
 
-	TSubclassOf<AMurdockCharacter> ClassToFind;
-	ClassToFind = AMurdockCharacter::StaticClass();
+	TSubclassOf<AMyCharacter> ClassToFind;
+	ClassToFind = AMyCharacter::StaticClass();
 	TArray<AActor*> FoundCharacter;
 	UGameplayStatics::GetAllActorsOfClass(World, ClassToFind, FoundCharacter);
 
 	for(auto Enemy : FoundCharacter)
 	{
-		AMurdockCharacter* Murdock = Cast<AMurdockCharacter>(Enemy);
+		AMyCharacter* Character = Cast<AMyCharacter>(Enemy);
 		FVector BossLocation = ControllingPawn->GetActorLocation();
-		FVector CharacterLocation = Murdock->GetActorLocation();
+		FVector CharacterLocation = Character->GetActorLocation();
 
 		FVector Distance = BossLocation-CharacterLocation;
 		if(Distance.Length() < DetectRadius)
 		{
 			OwnerComp.GetAIOwner()->StopMovement();
-			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, Murdock);
+			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, Character);
 			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);
 			
-			DrawDebugPoint(World, Murdock->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-			DrawDebugLine(World, ControllingPawn->GetActorLocation(), Murdock->GetActorLocation(), FColor::Blue, false, 0.27f);
+			DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
+			DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 0.27f);
 		}
 		else
 		{

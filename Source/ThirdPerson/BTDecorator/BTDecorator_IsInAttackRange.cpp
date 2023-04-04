@@ -7,6 +7,7 @@
 #include "ThirdPerson/MurdockCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "ThirdPerson/Boss1/Boss1Controller.h"
+#include "ThirdPerson/Character/MyCharacter.h"
 
 UBTDecorator_IsInAttackRange::UBTDecorator_IsInAttackRange()
 {
@@ -22,7 +23,7 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 	if(ControllingPawn == nullptr)
 		return false;
 
-	AMurdockCharacter* Target = Cast<AMurdockCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ABoss1Controller::TargetKey));
+	AMyCharacter* Target = Cast<AMyCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ABoss1Controller::TargetKey));
 	if(Target == nullptr)
 		return false;
 
