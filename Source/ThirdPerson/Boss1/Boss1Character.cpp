@@ -77,7 +77,7 @@ void ABoss1Character::Tick(float DeltaTime)
 
 	// 임시로 체력이 계속 줄도록 
 	if(GetHp()>75.1f)
-		SetHp(GetHp()-0.1f);
+		SetHp(GetHp()-0.02f);
 	
 }
 
@@ -114,6 +114,8 @@ void ABoss1Character::Attack()
 
 void ABoss1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	if(Montage->GetName() != "Boss1_Attack")
+		return;
 	UE_LOG(LogTemp, Warning, TEXT("OnAttackMontageEnded Called"));
 	UE_LOG(LogTemp, Warning, TEXT("Montage Name: %s"), *Montage->GetName());
 	_isAttacking=false;
@@ -135,6 +137,8 @@ void ABoss1Character::Gimmick1DropProjectile()
 
 void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	if(Montage->GetName() != "Boss1_Gimmick1")
+		return;
 	UE_LOG(LogTemp, Warning, TEXT("OnGimmick1MontageEnded Called"));
 	UE_LOG(LogTemp, Warning, TEXT("Montage Name: %s"), *Montage->GetName());
 	// TODO 기본공격후 호출이됨 수정필요
@@ -166,7 +170,7 @@ void ABoss1Character::Drop()
 		SpawnParams.Owner=this;
 		SpawnParams.Instigator=GetInstigator();
 		AGimmick1_Projectile* Projectile = World->SpawnActor<AGimmick1_Projectile>(ProjectileClass, DropLocation, FRotator::ZeroRotator, SpawnParams);
-
+		Projectile->PlayProjectileCastSound();
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_ProjectileCast, Projectile->GetActorLocation(), FRotator(-90, 0 ,0));
 	}
 	
