@@ -127,6 +127,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	InputComponent->BindAction<TDelegate<void(ECharacterState)>>("FSkill", IE_Pressed, this, &AMyCharacter::SkillPress, ECharacterState::State_SkillF);
 	InputComponent->BindAction<TDelegate<void(ECharacterState)>>("RSkill", IE_Pressed, this, &AMyCharacter::SkillPress, ECharacterState::State_SkillR);
 	InputComponent->BindAction<TDelegate<void(ECharacterState)>>("TSkill", IE_Pressed, this, &AMyCharacter::SkillPress, ECharacterState::State_SkillT);
+	InputComponent->BindAction<TDelegate<void(ECharacterState)>>("Space", IE_Pressed, this, &AMyCharacter::SkillPress, ECharacterState::State_Space);
 
 	PlayerInputComponent->BindAxis(TEXT("UpDown"),this,&AMyCharacter::UpDown);
 	PlayerInputComponent->BindAxis(TEXT("LeftRight"),this,&AMyCharacter::LeftRight);
@@ -258,71 +259,77 @@ void AMyCharacter::SkillPress(ECharacterState InputSkill)
 	switch(InputSkill)
 	{
 	case ECharacterState::State_SkillQ:
-		UE_LOG(LogTemp,Warning,TEXT("Q스킬발동"));
-		AnimInstance->PlaySkillQ();
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Q스킬발동"));
+			AnimInstance->PlaySkillQ();
 
-		AnimInstance -> JumpToSectionQ(AttackIndexQ);
-		AttackIndexQ = (AttackIndexQ +1) % 4;
-		break;
+			AnimInstance -> JumpToSectionQ(AttackIndexQ);
+			AttackIndexQ = (AttackIndexQ +1) % 4;
+			break;
+		}
 		
 	case ECharacterState::State_SkillE:
-		UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
-		AnimInstance->PlaySkillE();
+		{
+			UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
+			AnimInstance->PlaySkillE();
 
-		AnimInstance -> JumpToSectionE(AttackIndexE);
-		AttackIndexE = (AttackIndexE +1) % 4;
-		break;
+			AnimInstance -> JumpToSectionE(AttackIndexE);
+			AttackIndexE = (AttackIndexE +1) % 4;
+			break;
+		}
 		
 	case ECharacterState::State_SkillF:
-		
-		UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
-		AnimInstance->PlaySkillF();
-		break;
+		{
+			UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
+			AnimInstance->PlaySkillF();
+			break;
+		}
 		
 	case ECharacterState::State_SkillR:
-		UE_LOG(LogTemp,Warning,TEXT("R스킬발동"));
-		AnimInstance->PlaySkillSequence();
-		// SkillVector = (-1 *(this->GetActorForwardVector())*5000);
-		// this->LaunchCharacter(SkillVector,true,true);
-		vecMove = ((this->GetActorForwardVector())*-10000);
-		this->GetMovementComponent()->Velocity = vecMove;
-		this->AddMovementInput(vecMove);
-		break;
+		{
+			UE_LOG(LogTemp,Warning,TEXT("R스킬발동"));
+			AnimInstance->PlaySkillSequence();
+			// SkillVector = (-1 *(this->GetActorForwardVector())*5000);
+			// this->LaunchCharacter(SkillVector,true,true);
+			vecMove = ((this->GetActorForwardVector())*-10000);
+			this->GetMovementComponent()->Velocity = vecMove;
+			this->AddMovementInput(vecMove);
+			break;
+		}
 		
 	case ECharacterState::State_SkillT:
-		
-		skill_Length = 2000; // 스킬 범위 
-	
-		UE_LOG(LogTemp,Warning,TEXT("T분기점2"));
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		SetActorRotation(YawRotation);
-
-		const FVector lotation = this->GetActorLocation();
-	
-		
-		SkillVector = ((this->GetActorForwardVector())*skill_Length);
-		
-		FVector Location(SkillVector.X+lotation.X,SkillVector.Y+lotation.Y,lotation.Z+1000);
-		
-		float TraceDistance = 2000.0f; 
-		FHitResult HitResult;
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, Location, Location - FVector(0, 0, TraceDistance), ECC_Visibility))
 		{
-			FVector AdjustedLocation = HitResult.ImpactPoint + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+100);
-			SetActorLocation(AdjustedLocation, true, &HitResult);
+			skill_Length = 2000; // 스킬 범위 
+	
+			UE_LOG(LogTemp,Warning,TEXT("T분기점2"));
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
+			SetActorRotation(YawRotation);
+
+			const FVector lotation = this->GetActorLocation();
+	
+		
+			SkillVector = ((this->GetActorForwardVector())*skill_Length);
+		
+			FVector Location(SkillVector.X+lotation.X,SkillVector.Y+lotation.Y,lotation.Z+1000);
+		
+			float TraceDistance = 2000.0f; 
+			FHitResult HitResult;
+			if (GetWorld()->LineTraceSingleByChannel(HitResult, Location, Location - FVector(0, 0, TraceDistance), ECC_Visibility))
+			{
+				FVector AdjustedLocation = HitResult.ImpactPoint + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+100);
+				SetActorLocation(AdjustedLocation, true, &HitResult);
+			}
+		
+			AnimInstance->PlaySkillT();
+			break;
 		}
-
-		// vecMove = ((this->GetActorForwardVector())*50000);
-		// this->GetMovementComponent()->Velocity = vecMove;
-		// this->AddMovementInput(vecMove);
-
 		
-		// get forward vector
-		//SetActorLocation(Location);
-		
-		AnimInstance->PlaySkillT();
-		break;
+	case ECharacterState::State_Space:
+		{
+			AnimInstance->PlayRolling();
+			break;
+		}
 	}
 }
 

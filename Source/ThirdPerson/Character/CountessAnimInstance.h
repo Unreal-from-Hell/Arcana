@@ -24,6 +24,7 @@ public:
 	void PlaySkillE(){Montage_Play(SkillAnimationE,1.f);}
 	void PlaySkillT(){Montage_Play(SkillAnimationT,1.f);}
 	void ChangeMotion(){Montage_Play(RunMotion,1.3f);}
+	void PlayRolling(){Montage_Play(SkillRolling,1.6f);}
 	void JumpToSection(int32 SectionIndex);
 	void JumpToSectionQ(int32 SectionIndex);
 	void JumpToSectionE(int32 SectionIndex);
@@ -63,4 +64,6 @@ private:
 	UAnimMontage* SkillAnimationT;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category=Pawn, meta=(AllowPrivateAccess=true))
 	UAnimMontage* RunMotion;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category=Pawn, meta=(AllowPrivateAccess=true))
+	UAnimMontage* SkillRolling;
 };

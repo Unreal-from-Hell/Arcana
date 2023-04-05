@@ -51,6 +51,12 @@ UCountessAnimInstance::UCountessAnimInstance()
 		RunMotion = Motion.Object;
 		
 	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>Space(TEXT("AnimMontage'/Game/ThirdPerson/Blueprints/Character/Animation/Montage/SM_Space'"));
+	if(Space.Succeeded())
+	{
+		SkillRolling = Space.Object;
+	}
+	
 }
 
 // 실시간 애니인스턴스에 캐릭터상태 업데이트 
