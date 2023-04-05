@@ -121,7 +121,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	bool _bClearGimmick3=false;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category="Collision")
 	UBoxComponent* _SafeZoneBoxComponent;
 	
 	// Timer 관련 변수

@@ -44,10 +44,12 @@ ABoss1Character::ABoss1Character()
 	if(NSCast.Succeeded())
 		NS_ProjectileCast = NSCast.Object;
 
-	_SafeZoneBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-	_SafeZoneBoxComponent->SetupAttachment(GetMesh());
-	_SafeZoneBoxComponent->InitBoxExtent(FVector(300.f, 300.f, 300.f));
-	_SafeZoneBoxComponent->SetCollisionProfileName(TEXT("SafeZone"));
+	if(_SafeZoneBoxComponent)
+	{
+		_SafeZoneBoxComponent->InitBoxExtent(FVector(100.0f, 100.0f, 100.0f));
+		_SafeZoneBoxComponent->SetCollisionProfileName(TEXT("SafeZone"));
+	}
+		
 
 
 	bUseControllerRotationYaw=false;
@@ -75,7 +77,7 @@ void ABoss1Character::Tick(float DeltaTime)
 
 	// 임시로 체력이 계속 줄도록 
 	if(GetHp()>75.1f)
-		SetHp(GetHp()-0.02f);
+		SetHp(GetHp()-0.1f);
 	
 }
 
@@ -112,6 +114,8 @@ void ABoss1Character::Attack()
 
 void ABoss1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnAttackMontageEnded Called"));
+	UE_LOG(LogTemp, Warning, TEXT("Montage Name: %s"), *Montage->GetName());
 	_isAttacking=false;
 	OnAttackEnd.Broadcast();
 }
@@ -131,6 +135,8 @@ void ABoss1Character::Gimmick1DropProjectile()
 
 void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnGimmick1MontageEnded Called"));
+	UE_LOG(LogTemp, Warning, TEXT("Montage Name: %s"), *Montage->GetName());
 	// TODO 기본공격후 호출이됨 수정필요
 	OnGimmick1End.Broadcast();
 	
