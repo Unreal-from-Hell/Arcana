@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Sound/SoundCue.h"
 #include "Gimmick1_Projectile.generated.h"
 
 UCLASS()
@@ -31,6 +32,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void PlayProjectileCastSound();
+	void PlayProjectileHitSound();
+	
+
 private:
 	// Projectile Collision
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
@@ -43,4 +48,17 @@ private:
 	// Projectile Hit
 	UPROPERTY(VisibleAnywhere)
 	UNiagaraSystem* NS_ProjectileHit;
+
+
+	// =================================================================================
+	// Sound
+	UPROPERTY()
+	USoundCue* SC_ProjectileCast;
+
+	UPROPERTY()
+	USoundCue* SC_ProjectileHit;
 };
+
+
+
+
