@@ -42,6 +42,7 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 		FVector Distance = BossLocation-CharacterLocation;
 		if(Distance.Length() < DetectRadius)
 		{
+			UE_LOG(LogTemp,Warning,TEXT("GetAiOwner : %s"), *ControllingPawn->GetClass()->GetName());
 			OwnerComp.GetAIOwner()->StopMovement();
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, Character);
 			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);

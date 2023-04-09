@@ -29,6 +29,8 @@ EBTNodeResult::Type UBTTaskNode_Attack::ExecuteTask(UBehaviorTreeComponent& Owne
 		_isAttacking=false;
 	});
 	
+	
+	
 	// 일단 Inprogress에 머물게 한다. 공격이 끝나기 전까지 계속 지연 시켜준다
 	return EBTNodeResult::InProgress;
 }

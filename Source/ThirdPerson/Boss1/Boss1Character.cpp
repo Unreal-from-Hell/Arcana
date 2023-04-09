@@ -53,6 +53,7 @@ ABoss1Character::ABoss1Character()
 
 
 	bUseControllerRotationYaw=false;
+	GetCharacterMovement()->MaxWalkSpeed=650.f;
 	GetCharacterMovement()->bUseControllerDesiredRotation=false;
 	GetCharacterMovement()->bOrientRotationToMovement=true;
 	GetCharacterMovement()->RotationRate=FRotator(0.0f,480.0f,0.0f);
@@ -97,7 +98,7 @@ void ABoss1Character::PossessedBy(AController* NewController)
 	}
 	else
 	{
-		GetCharacterMovement()->MaxWalkSpeed=400.0f;
+		GetCharacterMovement()->MaxWalkSpeed=600.0f;
 	}
 }
 
@@ -116,8 +117,7 @@ void ABoss1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrup
 {
 	if(Montage->GetName() != "Boss1_Attack")
 		return;
-	UE_LOG(LogTemp, Warning, TEXT("OnAttackMontageEnded Called"));
-	UE_LOG(LogTemp, Warning, TEXT("Montage Name: %s"), *Montage->GetName());
+	
 	_isAttacking=false;
 	OnAttackEnd.Broadcast();
 }
