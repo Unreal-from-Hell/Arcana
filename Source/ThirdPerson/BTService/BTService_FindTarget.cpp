@@ -9,6 +9,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "ThirdPerson/Character/MyCharacter.h"
+#include "ThirdPerson/Monster/MonsterAIController.h"
 
 UBTService_FindTarget::UBTService_FindTarget()
 {
@@ -42,11 +43,10 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 		FVector Distance = BossLocation-CharacterLocation;
 		if(Distance.Length() < DetectRadius)
 		{
-			UE_LOG(LogTemp,Warning,TEXT("GetAiOwner : %s"), *ControllingPawn->GetClass()->GetName());
 			OwnerComp.GetAIOwner()->StopMovement();
-			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, Character);
-			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);
+			OwnerComp.GetBlackboardComponent()->SetValueAsObject("Target", Character);
 			
+			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);
 			DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 			DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 0.27f);
 		}

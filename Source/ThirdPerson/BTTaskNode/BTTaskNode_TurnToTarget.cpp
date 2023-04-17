@@ -21,7 +21,7 @@ EBTNodeResult::Type UBTTaskNode_TurnToTarget::ExecuteTask(UBehaviorTreeComponent
 	if(ControllingPawn == nullptr)
 		return EBTNodeResult::Failed;
 
-	AMyCharacter* Target = Cast<AMyCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ABoss1Controller::TargetKey));
+	AMyCharacter* Target = Cast<AMyCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("Target"));
 	if(Target == nullptr)
 		return EBTNodeResult::Failed;
 	
