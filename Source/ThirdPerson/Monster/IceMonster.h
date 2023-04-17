@@ -21,8 +21,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	void Attack();
-	FOnAttackEndDelegate OnAttackEnd;
+	virtual void Attack() override;
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);

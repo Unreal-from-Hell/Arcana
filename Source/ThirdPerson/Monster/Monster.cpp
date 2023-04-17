@@ -12,7 +12,7 @@ AMonster::AMonster()
 
 	SkeletalMeshComponent=CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	SkeletalMeshComponent->SetupAttachment(RootComponent);
-
+	
 	AIControllerClass=AMonsterAIController::StaticClass();
 	AutoPossessAI=EAutoPossessAI::PlacedInWorldOrSpawned;
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -41,4 +41,8 @@ void AMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AMonster::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+}
+
+void AMonster::Attack()
+{
 }

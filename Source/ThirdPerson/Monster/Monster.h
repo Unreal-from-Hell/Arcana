@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "ThirdPerson/Boss1/Boss1Character.h"
 #include "Monster.generated.h"
 
 UCLASS()
@@ -26,6 +27,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController) override;
+	
+	virtual void Attack();
+	FOnAttackEndDelegate OnAttackEnd;
 
 	float GetHp(){return Hp;};
 	void SetHp(float hp){Hp = hp;};

@@ -21,7 +21,7 @@ void AIceMonster::Attack()
 {
 	if(isAttacking)
 		return;
-
+	
 	AnimInstance->PlayAttackMontagee();
 	AnimInstance->JumpToSection();
 	// TODO 공격 사운드 및 이펙트
