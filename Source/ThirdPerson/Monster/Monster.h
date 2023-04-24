@@ -41,4 +41,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, Category=SkeletalMesh)
 	class USkeletalMeshComponent* SkeletalMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Collision, meta=(AllowPrivateAccess="true"))
+	class UCapsuleComponent* CapsuleComponent;
+
+	UPROPERTY(EditAnywhere)
+	class UFloatingPawnMovement* PawnMovement;
 };
