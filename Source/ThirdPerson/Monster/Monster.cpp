@@ -4,14 +4,28 @@
 #include "Monster.h"
 
 #include "MonsterAIController.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 // Sets default values
 AMonster::AMonster()
 {
+	CapsuleComponent=CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	RootComponent=CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
+	CapsuleComponent->InitCapsuleSize(70,120);
+	CapsuleComponent->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
+	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CapsuleComponent->SetCollisionProfileName("BlockAllDynamic");
+	CapsuleComponent->SetupAttachment(RootComponent);
 	SkeletalMeshComponent=CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	SkeletalMeshComponent->SetupAttachment(RootComponent);
+
+	// TODO 부모 클래스에 PawnMovement 추가
+	// PawnMovement=CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovement"));
+	// PawnMovement->MaxSpeed=600.f;
+	// PawnMovement->Acceleration=2000.f;
+	// PawnMovement->Deceleration=2000.f;
 	
 	AIControllerClass=AMonsterAIController::StaticClass();
 	AutoPossessAI=EAutoPossessAI::PlacedInWorldOrSpawned;
