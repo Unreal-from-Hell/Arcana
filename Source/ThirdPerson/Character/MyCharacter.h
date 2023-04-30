@@ -93,6 +93,7 @@ private:
 
 	UPROPERTY()
 	FVector vecMove;
+
 	
 	UPROPERTY()
 	class UCountessAnimInstance* AnimInstance;
@@ -110,6 +111,57 @@ private:
 	int32 AttackIndexQ = 0;
 	UPROPERTY()
 	int32 AttackIndexE = 0;
+
+	//=========================
+	//쿨타임
 	
+	struct FSkill
+	{
+		float cooldownTime = 0.0f;
+		float cooldownTimer = 0.0f;
+		float persantage = cooldownTimer/cooldownTime;
+		// 스킬 속성 등
+	};
+	void SetupSkillsCooldowns()
+	{
+		for (auto& skill : m_skills)
+		{
+			skill.cooldownTimer = 0.0f;
+		}
+	}
+	TArray<FSkill> m_skills = {
+		{ 15.0f, 0.0f },
+		{ 7.0f, 0.0f },
+		{ 40.0f, 0.0f },
+		{ 10.0f, 0.0f },
+		{ 15.0f, 0.0f }
+	}; // 벡터형 생성
+
+	//스킬 쿨타임 각자 담음
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite ,Category = "TEST" )
+	TArray<float> skillcool{
+		0,
+		0,
+		0,
+		0,
+		0
+	};
+	//float skillcool1 = m_skills[0].persantage;
+	
+	
+	bool CanUseSkill(int skillIndex) const
+	{
+		return m_skills[skillIndex].cooldownTimer <= 0.0f;
+	}
+	
+	void UseSkill(int skillIndex)
+	{
+		if (CanUseSkill(skillIndex))
+		{
+			m_skills[skillIndex].cooldownTimer = m_skills[skillIndex].cooldownTime;
+			// 스킬 사용 코드
+		}
+	}
 };	
 
