@@ -109,6 +109,17 @@ void AMyCharacter::Tick(float DeltaTime)
 	else
 		CameraBoom->TargetArmLength = FMath::FInterpTo(CameraBoom->TargetArmLength, 450, GetWorld()->DeltaTimeSeconds, ZoomSpeed);
 
+	int a = 0;
+	for (auto& skill : m_skills)
+	{
+		skill.cooldownTimer -= DeltaTime;
+		skill.cooldownTimer = FMath::Max(0.0f, skill.cooldownTimer);
+		skill.persantage = skill.cooldownTimer/skill.cooldownTime;
+		skillcool[a]= skill.persantage;
+		a++;
+		//스킬 0밑으로 못가게 고정
+	}
+	
 }
 
 // 바인딩 T델리게이트로 열거형 스킬 불러오기 
@@ -153,8 +164,8 @@ void AMyCharacter::Shift()
 
 	if(!AnimInstance->Dashing) // 기존의 모션 한번만 발동되게 체크
 	{
-		AnimInstance->ChangeMotion();
 		IsAttacking = true;
+		AnimInstance->ChangeMotion();
 	}
 	bShiftKeyPressed = true; //틱함수 발동 
 	AnimInstance->Dashing = true;
@@ -260,68 +271,120 @@ void AMyCharacter::SkillPress(ECharacterState InputSkill)
 	{
 	case ECharacterState::State_SkillQ:
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Q스킬발동"));
-			AnimInstance->PlaySkillQ();
+			int skillIndex = 0;
+			if (CanUseSkill(skillIndex))
+			{
+				UE_LOG(LogTemp,Warning,TEXT("Q스킬발동"));
+				AnimInstance->PlaySkillQ();
 
-			AnimInstance -> JumpToSectionQ(AttackIndexQ);
-			AttackIndexQ = (AttackIndexQ +1) % 4;
+				AnimInstance -> JumpToSectionQ(AttackIndexQ);
+				if(AttackIndexQ == 3)
+				{
+					UseSkill(skillIndex);
+				}
+				AttackIndexQ = (AttackIndexQ +1) % 4;
+				// 스킬 사용 코드
+			}
+			else
+			{
+					IsAttacking = false;
+			}
 			break;
+
 		}
 		
 	case ECharacterState::State_SkillE:
 		{
-			UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
-			AnimInstance->PlaySkillE();
-
-			AnimInstance -> JumpToSectionE(AttackIndexE);
-			AttackIndexE = (AttackIndexE +1) % 4;
+			int skillIndex = 1;
+			if (CanUseSkill(skillIndex))
+			{
+				UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
+				AnimInstance->PlaySkillE();
+				AnimInstance -> JumpToSectionE(AttackIndexE);
+				if(AttackIndexE == 3)
+				{
+					UseSkill(skillIndex);
+				}
+				AttackIndexE = (AttackIndexE +1) % 4;
+			}
+			else
+			{
+				IsAttacking = false;
+			}
 			break;
 		}
 		
 	case ECharacterState::State_SkillF:
 		{
-			UE_LOG(LogTemp,Warning,TEXT("E스킬발동"));
-			AnimInstance->PlaySkillF();
+			int skillIndex = 2;
+			if (CanUseSkill(skillIndex))
+			{
+				UE_LOG(LogTemp,Warning,TEXT("F스킬발동"));
+				AnimInstance->PlaySkillF();
+				UseSkill(skillIndex);
+			}
+			else
+			{
+				IsAttacking = false;
+			}
 			break;
 		}
 		
 	case ECharacterState::State_SkillR:
 		{
-			UE_LOG(LogTemp,Warning,TEXT("R스킬발동"));
-			AnimInstance->PlaySkillSequence();
-			// SkillVector = (-1 *(this->GetActorForwardVector())*5000);
-			// this->LaunchCharacter(SkillVector,true,true);
-			vecMove = ((this->GetActorForwardVector())*-10000);
-			this->GetMovementComponent()->Velocity = vecMove;
-			this->AddMovementInput(vecMove);
+			int skillIndex = 3;
+			if (CanUseSkill(skillIndex))
+			{
+				UE_LOG(LogTemp,Warning,TEXT("R스킬발동"));
+				AnimInstance->PlaySkillSequence();
+				// SkillVector = (-1 *(this->GetActorForwardVector())*5000);
+				// this->LaunchCharacter(SkillVector,true,true);
+				vecMove = ((this->GetActorForwardVector())*-10000);
+				this->GetMovementComponent()->Velocity = vecMove;
+				this->AddMovementInput(vecMove);
+				UseSkill(skillIndex);
+			}
+			else
+			{
+				IsAttacking = false;
+			}
 			break;
 		}
 		
 	case ECharacterState::State_SkillT:
 		{
-			skill_Length = 2000; // 스킬 범위 
-	
-			UE_LOG(LogTemp,Warning,TEXT("T분기점2"));
-			const FRotator Rotation = Controller->GetControlRotation();
-			const FRotator YawRotation(0, Rotation.Yaw, 0);
-			SetActorRotation(YawRotation);
-
-			const FVector lotation = this->GetActorLocation();
-	
-		
-			SkillVector = ((this->GetActorForwardVector())*skill_Length);
-		
-			FVector Location(SkillVector.X+lotation.X,SkillVector.Y+lotation.Y,lotation.Z+1000);
-		
-			float TraceDistance = 2000.0f; 
-			FHitResult HitResult;
-			if (GetWorld()->LineTraceSingleByChannel(HitResult, Location, Location - FVector(0, 0, TraceDistance), ECC_Visibility))
+			int skillIndex = 4;
+			if (CanUseSkill(skillIndex))
 			{
-				FVector AdjustedLocation = HitResult.ImpactPoint + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+100);
-				SetActorLocation(AdjustedLocation, true, &HitResult);
-			}
+				skill_Length = 2000; // 스킬 범위 
+	
+				UE_LOG(LogTemp,Warning,TEXT("T분기점2"));
+				const FRotator Rotation = Controller->GetControlRotation();
+				const FRotator YawRotation(0, Rotation.Yaw, 0);
+				SetActorRotation(YawRotation);
+
+				const FVector lotation = this->GetActorLocation();
+	
 		
-			AnimInstance->PlaySkillT();
+				SkillVector = ((this->GetActorForwardVector())*skill_Length);
+		
+				FVector Location(SkillVector.X+lotation.X,SkillVector.Y+lotation.Y,lotation.Z+1000);
+		
+				float TraceDistance = 2000.0f; 
+				FHitResult HitResult;
+				if (GetWorld()->LineTraceSingleByChannel(HitResult, Location, Location - FVector(0, 0, TraceDistance), ECC_Visibility))
+				{
+					FVector AdjustedLocation = HitResult.ImpactPoint + FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+100);
+					SetActorLocation(AdjustedLocation, true, &HitResult);
+				}
+		
+				AnimInstance->PlaySkillT();
+				UseSkill(skillIndex);
+			}
+			else
+			{
+				IsAttacking = false;
+			}
 			break;
 		}
 		

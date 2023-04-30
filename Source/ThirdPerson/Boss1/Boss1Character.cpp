@@ -139,8 +139,7 @@ void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterr
 {
 	if(Montage->GetName() != "Boss1_Gimmick1")
 		return;
-	UE_LOG(LogTemp, Warning, TEXT("OnGimmick1MontageEnded Called"));
-	UE_LOG(LogTemp, Warning, TEXT("Montage Name: %s"), *Montage->GetName());
+	
 	// TODO 기본공격후 호출이됨 수정필요
 	OnGimmick1End.Broadcast();
 	
@@ -161,7 +160,7 @@ void ABoss1Character::Drop()
 			Particle->DestroyComponent();
 	}
 	
-	FVector DropLocation = GetActorLocation() + FVector(FMath::RandRange(-5000, 5000), FMath::RandRange(-5000, 5000), 3000.0f);
+	FVector DropLocation = GetActorLocation() + FVector(FMath::RandRange(-3000, 3000), FMath::RandRange(-3000, 3000), 2000.0f);
 	
 	UWorld* World = GetWorld();
 	if(World)
@@ -199,8 +198,10 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 	uint8 RandomIdx = FMath::RandRange(0,3);
 	uint8 idx = 0;
 	// 임시로 Particle 생성
+	
 	for(auto TargetPoint : TargetPoints)
 	{
+		return;
 		FVector SpawnFrontLocation = TargetPoint->GetActorLocation() + FVector(0,0,300); 
 		FVector SpawnLeftLocation =  SpawnFrontLocation + FVector(300, -300, 0);
 		FVector SpawnRightLocation = SpawnFrontLocation + FVector(300, 300, 0);
@@ -211,18 +212,18 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 			// TODO 투명 콜리전 박스 생성해서 Safe Zone 생성
 			_SafeZoneBoxComponent->SetWorldLocation(TargetPoint->GetActorLocation());
 			
-			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
+			/*ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnLeftLocation, FRotator(0,90,0), true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnRightLocation, FRotator(0,90,0), true));
-			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));
+			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));*/
 			idx++;
 			continue;
 		}
 		
-		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
+		/*ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
 		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnLeftLocation, FRotator(0,90,0), true));
 		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnRightLocation, FRotator(0,90,0), true));
-		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));
+		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));*/
 		idx++;
 	}
 }
