@@ -4,16 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "../MonsterAnimInstance.h"
-#include "FireMonsterAnim.generated.h"
+#include "LightMonsterAnim.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THIRDPERSON_API UFireMonsterAnim : public UMonsterAnimInstance
+class THIRDPERSON_API ULightMonsterAnim : public UMonsterAnimInstance
 {
 	GENERATED_BODY()
 
 public:
-	UFireMonsterAnim();
+	ULightMonsterAnim();
+	
 };
