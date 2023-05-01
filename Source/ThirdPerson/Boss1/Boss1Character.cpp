@@ -44,14 +44,11 @@ ABoss1Character::ABoss1Character()
 	if(NSCast.Succeeded())
 		NS_ProjectileCast = NSCast.Object;
 
-	if(_SafeZoneBoxComponent)
-	{
-		_SafeZoneBoxComponent->InitBoxExtent(FVector(100.0f, 100.0f, 100.0f));
-		_SafeZoneBoxComponent->SetCollisionProfileName(TEXT("SafeZone"));
-	}
-		
-
-
+	_SafeZoneBoxComponent=CreateDefaultSubobject<UBoxComponent>(TEXT("SafeZone"));
+	_SafeZoneBoxComponent->InitBoxExtent(FVector(200.0f, 200.0f, 200.0f));
+	_SafeZoneBoxComponent->SetCollisionProfileName(TEXT("SafeZone"));
+	
+	
 	bUseControllerRotationYaw=false;
 	GetCharacterMovement()->MaxWalkSpeed=650.f;
 	GetCharacterMovement()->bUseControllerDesiredRotation=false;
@@ -201,7 +198,6 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 	
 	for(auto TargetPoint : TargetPoints)
 	{
-		return;
 		FVector SpawnFrontLocation = TargetPoint->GetActorLocation() + FVector(0,0,300); 
 		FVector SpawnLeftLocation =  SpawnFrontLocation + FVector(300, -300, 0);
 		FVector SpawnRightLocation = SpawnFrontLocation + FVector(300, 300, 0);
@@ -210,7 +206,7 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 		if(idx == RandomIdx)
 		{
 			// TODO 투명 콜리전 박스 생성해서 Safe Zone 생성
-			_SafeZoneBoxComponent->SetWorldLocation(TargetPoint->GetActorLocation());
+			_SafeZoneBoxComponent->SetWorldLocation(SpawnFrontLocation);
 			
 			/*ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnLeftLocation, FRotator(0,90,0), true));
