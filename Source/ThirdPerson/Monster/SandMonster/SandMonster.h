@@ -3,28 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DarknessMonsterAnim.h"
+#include "SandMonsterAnim.h"
 #include "../Monster.h"
-#include "DarknessMonster.generated.h"
+#include "SandMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THIRDPERSON_API ADarknessMonster : public AMonster
+class THIRDPERSON_API ASandMonster : public AMonster
 {
 	GENERATED_BODY()
 
 public:
-	ADarknessMonster();
+	ASandMonster();
 	virtual void BeginPlay() override;
 	virtual void Attack() override;
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-
 private:
 	UPROPERTY()
-	UDarknessMonsterAnim* AnimInstance;
-	
+	USandMonsterAnim* AnimInstance;
 };
