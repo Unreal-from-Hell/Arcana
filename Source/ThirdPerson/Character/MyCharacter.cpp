@@ -174,7 +174,7 @@ void AMyCharacter::Shift()
 void AMyCharacter::ShiftReleasd()
 {
 	bShiftKeyPressed = false;
-	GetCharacterMovement()->MaxWalkSpeed= 1000.f; // 원래 속도 
+	GetCharacterMovement()->MaxWalkSpeed= 3000.f; // 원래 속도 
 }
 
 void AMyCharacter::UpDown(float Value)

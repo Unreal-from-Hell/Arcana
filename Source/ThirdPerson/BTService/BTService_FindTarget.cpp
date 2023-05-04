@@ -46,16 +46,16 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 			OwnerComp.GetAIOwner()->StopMovement();
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject("Target", Character);
 			
-			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);
+			/*DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Green, false, 0.2f);
 			DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-			DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 0.27f);
+			DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 0.27f);*/
 		}
 		else
 		{
 			// TODO StopMovement 개선이 필요함
 			OwnerComp.GetAIOwner()->StopMovement();
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject(ABoss1Controller::TargetKey, nullptr);
-			DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Red, false, 0.2f);
+			//DrawDebugSphere(World, BossLocation, DetectRadius, 16, FColor::Red, false, 0.2f);
 		}
 	}
 }
