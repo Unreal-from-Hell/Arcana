@@ -18,6 +18,7 @@ public:
 	ABoss1Controller();
 	virtual void OnPossess(APawn* InPawn) override;
 
+	void RunAI();
 	// AI를 종료시키는 함수
 	void StopAI();
 
