@@ -41,8 +41,17 @@ void ABoss1Controller::OnPossess(APawn* InPawn)
 		BlackboardComp->SetValueAsBool(Gimmick1, false);
 		BlackboardComp->SetValueAsBool(Gimmick2, false);
 		BlackboardComp->SetValueAsBool(Gimmick3, false);
-		RunBehaviorTree(_BTAsset);		
+		RunBehaviorTree(_BTAsset);
 	}
+}
+
+void ABoss1Controller::RunAI()
+{
+	UBehaviorTreeComponent* BehaviorTreeComponent=Cast<UBehaviorTreeComponent>(BrainComponent);
+	if(BehaviorTreeComponent==nullptr)
+		return;
+	BehaviorTreeComponent->StartLogic();
+	//RunBehaviorTree(_BTAsset);
 }
 
 void ABoss1Controller::StopAI()
@@ -50,6 +59,7 @@ void ABoss1Controller::StopAI()
 	UBehaviorTreeComponent* BehaviorTreeComponent=Cast<UBehaviorTreeComponent>(BrainComponent);
 	if(BehaviorTreeComponent==nullptr)
 		return;
-
-	BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+	
+	BehaviorTreeComponent->StopLogic(TEXT("StopAI"));
+	//BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
 }

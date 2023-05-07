@@ -23,6 +23,7 @@ public:
 	// =======================================================================================
 	// 애니메이션 실행
 	void PlayAttackMontage();
+	void PlayGimmick1AfterMontage();
 	void JumpToSection();
 	void PlayGimmick1Montage();
 
@@ -56,4 +57,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, meta=(AllowPrivateAccess=true))
 	UAnimMontage* _gimmick2Montage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, meta=(AllowPrivateAccess=true))
+	UAnimMontage* _gimmick1AfterMontage;
 };

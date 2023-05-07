@@ -15,6 +15,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnGimmick1EndDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnGimmick1AfterEndDelegate);
 
 UCLASS()
 class THIRDPERSON_API ABoss1Character : public ACharacter
@@ -60,14 +61,19 @@ public:
 	// 기본 공격
 	void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
+	FOnGimmick1EndDelegate OnGimmick1End;
+	FOnGimmick1AfterEndDelegate OnGimmick1AfterEndDelegate;
 	
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	UFUNCTION()
+	void OnGimmick1AfterMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 	
 	// 기믹 1
 	void Gimmick1();
 	void Gimmick1DropProjectile();
-	FOnGimmick1EndDelegate OnGimmick1End;
+	
 
 	UFUNCTION()
 	void OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterrupted);

@@ -4,6 +4,7 @@
 #include "Boss1Character.h"
 
 #include "Boss1AnimInstance.h"
+#include "Boss1Controller.h"
 #include "Gimmick1_Projectile.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -66,6 +67,7 @@ void ABoss1Character::BeginPlay()
 	_animInstance=Cast<UBoss1AnimInstance>(GetMesh()->GetAnimInstance());
 	_animInstance->OnMontageEnded.AddDynamic(this, &ABoss1Character::OnAttackMontageEnded);
 	_animInstance->OnMontageEnded.AddDynamic(this, &ABoss1Character::OnGimmick1MontageEnded);
+	_animInstance->OnMontageEnded.AddDynamic(this, &ABoss1Character::OnGimmick1AfterMontageEnded);
 }
 
 // Called every frame
@@ -119,6 +121,15 @@ void ABoss1Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrup
 	OnAttackEnd.Broadcast();
 }
 
+void ABoss1Character::OnGimmick1AfterMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if(Montage->GetName() != "Boss1_Gimmick1_After")
+		return;
+	UE_LOG(LogTemp, Warning, TEXT("Gimmick1After Ended"));
+	ABoss1Controller* AIController = Cast<ABoss1Controller>(this->GetController());
+	AIController->RunAI();
+}
+
 void ABoss1Character::Gimmick1()
 {
 	_animInstance->PlayGimmick1Montage();
@@ -137,11 +148,11 @@ void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterr
 	if(Montage->GetName() != "Boss1_Gimmick1")
 		return;
 	
-	// TODO 기본공격후 호출이됨 수정필요
 	OnGimmick1End.Broadcast();
-	
+	_animInstance->PlayGimmick1AfterMontage();
+	ABoss1Controller* AIController = Cast<ABoss1Controller>(this->GetController());
+	AIController->StopAI();
 	Gimmick1DropProjectile();
-
 	SetbClearGimmick1(true);
 }
 

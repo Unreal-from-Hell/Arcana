@@ -12,6 +12,7 @@ UBoss1AnimInstance::UBoss1AnimInstance()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> Attack(TEXT("AnimMontage'/Game/ThirdPerson/Blueprints/Monster/Boss1/Anim/Boss1_Attack.Boss1_Attack'"));
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> Gimmick1(TEXT("AnimMontage'/Game/ThirdPerson/Blueprints/Monster/Boss1/Anim/Boss1_Gimmick1.Boss1_Gimmick1'"));
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> Gimmick2(TEXT("AnimMontage'/Game/ThirdPerson/Blueprints/Monster/Boss1/Anim/Boss1_Gimmick2.Boss1_Gimmick2'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Gimmick1After(TEXT("AnimMontage'/Game/ThirdPerson/Blueprints/Monster/Boss1/Anim/Boss1_Gimmick1_After.Boss1_Gimmick1_After'"));
 	
 	if(Attack.Succeeded())
 		_attackMontage=Attack.Object;
@@ -19,6 +20,8 @@ UBoss1AnimInstance::UBoss1AnimInstance()
 		_gimmick1Montage=Gimmick1.Object;
 	if(Gimmick2.Succeeded())
 		_gimmick2Montage=Gimmick2.Object;
+	if(Gimmick1After.Succeeded())
+		_gimmick1AfterMontage=Gimmick1After.Object;
 	
 }
 
@@ -42,6 +45,11 @@ void UBoss1AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UBoss1AnimInstance::PlayAttackMontage()
 {
 	Montage_Play(_attackMontage, 1.f);
+}
+
+void UBoss1AnimInstance::PlayGimmick1AfterMontage()
+{
+	Montage_Play(_gimmick1AfterMontage, 1.f);
 }
 
 void UBoss1AnimInstance::JumpToSection()
