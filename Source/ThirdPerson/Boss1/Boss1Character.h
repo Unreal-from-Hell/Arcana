@@ -100,6 +100,22 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Target Points")
 	TArray<ATargetPoint*> TargetPoints;
 
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _hp = 100.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _minHp = 0.1f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _maxHp = 100.0f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _Gimmick1Hp = 75.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Gimmick1")
+	bool _bClearGimmick1=false;
+	
 private:
 	// ===========================================================================================
 	// 변수
@@ -108,18 +124,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	bool _isAttacking = false;
-
-	UPROPERTY(VisibleAnywhere)
-	float _hp = 100.0f;
-
-	UPROPERTY(VisibleAnywhere)
-	float _maxHp = 100.0f;
-
+	
 	UPROPERTY(VisibleAnywhere)
 	FVector _gimmick1Location;
-
-	UPROPERTY(VisibleAnywhere)
-	bool _bClearGimmick1=false;
 
 	UPROPERTY(VisibleAnywhere)
 	bool _bClearGimmick2=false;
@@ -129,7 +136,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Collision")
 	UBoxComponent* _SafeZoneBoxComponent;
-	
+
 	// Timer 관련 변수
 	int32 _countdown = 1000;
 	FTimerHandle _countdownHandle;
