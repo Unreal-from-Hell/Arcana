@@ -76,8 +76,8 @@ void ABoss1Character::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// 임시로 체력이 계속 줄도록 
-	if(GetHp()>75.1f)
-		SetHp(GetHp()-0.02f);
+	// if(GetHp()>75.1f)
+	// 	SetHp(GetHp()-0.02f);
 	
 }
 
@@ -125,7 +125,8 @@ void ABoss1Character::OnGimmick1AfterMontageEnded(UAnimMontage* Montage, bool bI
 {
 	if(Montage->GetName() != "Boss1_Gimmick1_After")
 		return;
-	UE_LOG(LogTemp, Warning, TEXT("Gimmick1After Ended"));
+
+	_bClearGimmick1=true;
 	ABoss1Controller* AIController = Cast<ABoss1Controller>(this->GetController());
 	AIController->RunAI();
 }
