@@ -20,6 +20,7 @@ public:
 
 	void RunAI();
 	// AI를 종료시키는 함수
+	UFUNCTION(BlueprintCallable)
 	void StopAI();
 
 	// BlackBoard Data Key
