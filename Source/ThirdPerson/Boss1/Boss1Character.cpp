@@ -125,8 +125,8 @@ void ABoss1Character::OnGimmick1AfterMontageEnded(UAnimMontage* Montage, bool bI
 {
 	if(Montage->GetName() != "Boss1_Gimmick1_After")
 		return;
-
-	_bClearGimmick1=true;
+	
+	SetbClearGimmick1(true);
 	ABoss1Controller* AIController = Cast<ABoss1Controller>(this->GetController());
 	AIController->RunAI();
 }
@@ -154,7 +154,6 @@ void ABoss1Character::OnGimmick1MontageEnded(UAnimMontage* Montage, bool bInterr
 	ABoss1Controller* AIController = Cast<ABoss1Controller>(this->GetController());
 	AIController->StopAI();
 	Gimmick1DropProjectile();
-	SetbClearGimmick1(true);
 }
 
 void ABoss1Character::Drop()

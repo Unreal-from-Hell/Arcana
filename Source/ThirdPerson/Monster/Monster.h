@@ -31,13 +31,11 @@ public:
 	virtual void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
 
-	float GetHp(){return Hp;};
-	void SetHp(float hp){Hp = hp;};
+	float GetHp(){return _hp;};
+	void SetHp(float hp){_hp = hp;};
 	
 protected:
 	bool isAttacking=false;
-	float Hp=100.f;
-	float MaxHp=100.f;
 	
 	UPROPERTY(VisibleAnywhere, Category=SkeletalMesh)
 	class USkeletalMeshComponent* SkeletalMeshComponent;
@@ -47,4 +45,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UFloatingPawnMovement* PawnMovement;
+	
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _hp = 100.0f;
+    
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _minHp = 0.1f;
+    	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Hp")
+	float _maxHp = 100.0f;
 };
