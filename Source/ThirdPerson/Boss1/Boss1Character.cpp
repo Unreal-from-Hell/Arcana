@@ -23,6 +23,7 @@ ABoss1Character::ABoss1Character()
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> PSafeZone(TEXT("ParticleSystem'/Game/ThirdPerson/Blueprints/Monster/Boss1/Particles/FX/P_Boss1_Shield_2.P_Boss1_Shield_2'"));
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> PDrop(TEXT("ParticleSystem'/Game/ThirdPerson/Blueprints/Monster/Boss1/Particles/FX/P_DropBoss1.P_DropBoss1'"));
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NSCast(TEXT("NiagaraSystem'/Game/ThirdPerson/Blueprints/Monster/Boss1/Particles/NS/Gimmick1/NS_Boss1_Cast.NS_Boss1_Cast'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SMMask(TEXT("StaticMesh'/Game/ThirdPerson/Blueprints/Monster/Boss1/SM_Boss1_Mask.SM_Boss1_Mask'"));
 	
 	if(SCGimmick1.Succeeded())
 		SC_Gimmick1 = SCGimmick1.Object;
@@ -44,6 +45,18 @@ ABoss1Character::ABoss1Character()
 
 	if(NSCast.Succeeded())
 		NS_ProjectileCast = NSCast.Object;
+
+	UE_LOG(LogTemp, Warning, TEXT("Mask Attach start"));
+	FName MaskSocket(TEXT("Socket_Mask"));
+	if(GetMesh()->DoesSocketExist(MaskSocket))
+	{
+		Mask=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mask"));
+		if(SMMask.Succeeded())
+			Mask->SetStaticMesh(SMMask.Object);
+		
+		UE_LOG(LogTemp, Warning, TEXT("Mask Attached"));
+		Mask->SetupAttachment(GetMesh(), MaskSocket);
+	}
 
 	_SafeZoneBoxComponent=CreateDefaultSubobject<UBoxComponent>(TEXT("SafeZone"));
 	_SafeZoneBoxComponent->InitBoxExtent(FVector(200.0f, 200.0f, 200.0f));
