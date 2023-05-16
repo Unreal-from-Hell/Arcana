@@ -115,7 +115,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite ,Category="Gimmick1")
 	bool _bClearGimmick1=false;
-	
+
+	// Static Mesh Mask
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Mask;
 private:
 	// ===========================================================================================
 	// 변수
@@ -150,7 +153,7 @@ private:
 
 	UPROPERTY()
 	USoundCue* SC_Sword;
-
+	
 	// ============================================================================================
 	// 이펙트
 	UPROPERTY(EditAnywhere, Category="Effects")
