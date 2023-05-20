@@ -48,6 +48,7 @@ ABoss1Character::ABoss1Character()
 
 	UE_LOG(LogTemp, Warning, TEXT("Mask Attach start"));
 	FName MaskSocket(TEXT("Socket_Mask"));
+	// TODO DoesSocketExist가 제대로 안됨
 	if(GetMesh()->DoesSocketExist(MaskSocket))
 	{
 		Mask=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mask"));
@@ -56,6 +57,10 @@ ABoss1Character::ABoss1Character()
 		
 		UE_LOG(LogTemp, Warning, TEXT("Mask Attached"));
 		Mask->SetupAttachment(GetMesh(), MaskSocket);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Socket Invalid"));
 	}
 
 	_SafeZoneBoxComponent=CreateDefaultSubobject<UBoxComponent>(TEXT("SafeZone"));
@@ -232,18 +237,18 @@ void ABoss1Character::SpawnGimmick1ShieldParticle()
 			// TODO 투명 콜리전 박스 생성해서 Safe Zone 생성
 			_SafeZoneBoxComponent->SetWorldLocation(SpawnFrontLocation);
 			
-			/*ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
+			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnLeftLocation, FRotator(0,90,0), true));
 			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnRightLocation, FRotator(0,90,0), true));
-			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));*/
+			ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_SafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));
 			idx++;
 			continue;
 		}
 		
-		/*ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
+		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnFrontLocation, FRotator::ZeroRotator, true));
 		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnLeftLocation, FRotator(0,90,0), true));
 		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnRightLocation, FRotator(0,90,0), true));
-		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));*/
+		ParticleSystemComponents.Add(UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),P_NotSafeZoneParticle, SpawnBehindLocation, FRotator::ZeroRotator, true));
 		idx++;
 	}
 }
